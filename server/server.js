@@ -8,7 +8,9 @@ require('dotenv').config();  // Load environment variables
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());  // Enable if you have frontend on a different domain
+app.use(cors({
+  origin:"*"
+}));  // Enable if you have frontend on a different domain
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI).then(() => console.log('MongoDB connected'))
