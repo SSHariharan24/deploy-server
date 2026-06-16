@@ -13,8 +13,11 @@ app.use(cors({
 }));  // Enable if you have frontend on a different domain
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 5000,
+  bufferCommands: false // Fail fast if database is disconnected
+}).then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // Use routes
 app.use('/api', emailRoutes);
