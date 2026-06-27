@@ -7,16 +7,19 @@ router.post('/sendEmail', async (req, res) => {
   const { name, email, message } = req.body;
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp-relay.brevo.com',
+    port: 2525,
+    secure: false,
     auth: {
-      user: process.env.EMAIL,
+      user: process.env.SMTP_USER,
       pass: process.env.PASSWORD
     }
   });
 
   const mailOptions = {
-    from: email,
-    to: process.env.MAILS || process.env.EMAIL,
+    from: `"Portfolio Contact" <${process.env.EMAIL}>`,
+    replyTo: process.env.MAILS,
+    to: email,
     subject: `💼 Portfolio Contact Request from ${name}`,
     text: `New Portfolio Message:\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
     html: `
@@ -129,7 +132,7 @@ router.post('/sendEmail', async (req, res) => {
           <div class="message-box">${message}</div>
           
           <div style="text-align: center;">
-            <a href="mailto:${email}" class="btn">Reply to Sender</a>
+            <a href="mailto:${process.env.MAILS}" class="btn">Reply to Sender</a>
           </div>
         </div>
         <div class="footer">
